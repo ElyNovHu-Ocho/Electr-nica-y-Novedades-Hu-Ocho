@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HU-OCHO - Mi Carrito de Compras</title>
+    <link rel="icon" type="image/png" href="Imagenes/Icono.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="CSS/Estilos_globales.css">
+    <link rel="stylesheet" href="CSS/Carrito.css">
+</head>
+<body>
+    <header class="encabezado-principal">
+        <a href="index.html" class="contenedor-marca">
+            <img src="Imagenes/Logo2.png" alt="Logo Electrónica Hu-Ocho" class="logo-marca-img bg-white">
+        </a>
+        
+        <div class="contenedor-busqueda">
+            <input type="text" class="entrada-busqueda" placeholder="Que deseas buscar?...">
+            <button class="boton-busqueda"><i class="bi bi-search"></i></button>
+        </div>
+        
+        <div class="menu-derecho-encabezado">
+            <div class="envoltura-desplegable">
+                <button class="caja-boton-carrito" onclick="gestionarClicCarrito()">
+                    <i class="bi bi-cart3"></i>
+                    <span class="insignia-contador-carrito" id="cart-global-badge">0</span>
+                </button>
+                <div class="menu-desplegable-perfil" id="dropdown-menu-usuario"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="envoltura-amarilla-carrito" id="vista-carrito-principal">
+        <h1 class="titulo-principal-carrito">Productos del carrito</h1>
+
+        <div id="contenedor-items-carrito" class="envoltura-articulos-carrito"></div>
+
+        <div class="tarjeta-interna-blanca contenedor-resumen">
+            <div class="caja-texto-resumen">
+                <div class="titulo-resumen-negrita">Productos a pagar:</div>
+                <div>Envio: <span class="fuente-normal" id="lbl-envio">$0.00</span></div>
+                <div>Total: <span class="fuente-normal" id="lbl-total">$0.00</span></div>
+            </div>
+            <button class="boton-pagar-verde" onclick="procesarPagoOrden()">Pagar</button>
+        </div>
+    </main>
+
+    <div id="vista-checkout-pago" class="contenedor-vista-checkout">
+        <button class="boton-regresar-carrito" onclick="volverAlCarrito()">
+            <i class="bi bi-arrow-left"></i> Volver al Carrito
+        </button>
+
+        <div class="caja-checkout-amarilla">
+            <div class="encabezado-checkout">Datos personales y de contacto</div>
+            
+            <div class="grupo-checkout mb-20" style="background: #1e293b; border: 1px solid var(--cyan-brillante); padding: 15px; border-radius: 10px; margin-bottom: 25px;">
+                <span style="color: var(--cyan-brillante); font-size: 1.1rem; font-weight: bold;"><i class="bi bi-info-circle"></i> Aviso Importante:</span>
+                <span style="color: #f8fafc; font-size: 0.95rem; display: block; margin-top: 5px;">Actualmente los envíos a domicilio están disponibles <b>únicamente dentro del estado de Nuevo León</b>.</span>
+            </div>
+
+            <div class="grupo-checkout mb-20">
+                <label>Nombre completo</label>
+                <input type="text" class="entrada-checkout" id="chk-nombre" placeholder="Ej. Juan Pérez">
+            </div>
+            
+            <div class="cuadricula-checkout">
+                <div class="grupo-checkout">
+                    <label>Correo electrónico</label>
+                    <input type="email" class="entrada-checkout" placeholder="Ej. correo@gmail.com" id="chk-correo">
+                </div>
+                <div class="grupo-checkout">
+                    <label>Teléfono</label>
+                    <input type="text" class="entrada-checkout" placeholder="Ej. 81 1234 5678" id="chk-telefono">
+                </div>
+                
+                <div class="grupo-checkout">
+                    <label>Calle</label>
+                    <input type="text" class="entrada-checkout" id="chk-calle" placeholder="Ej. Av. Primavera">
+                </div>
+                <div class="grupo-checkout" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <label>No. Exterior</label>
+                        <input type="text" class="entrada-checkout" id="chk-num-ext" placeholder="Ej. 123">
+                    </div>
+                    <div>
+                        <label>No. Interior</label>
+                        <input type="text" class="entrada-checkout" id="chk-num-int" placeholder="Opcional">
+                    </div>
+                </div>
+
+                <div class="grupo-checkout">
+                    <label>Colonia</label>
+                    <input type="text" class="entrada-checkout" id="chk-colonia" placeholder="Ej. Rincón de Huinalá">
+                </div>
+                <div class="grupo-checkout">
+                    <label>Ciudad o Municipio (Solo N.L.)</label>
+                    <select class="entrada-checkout" id="chk-ciudad" style="cursor: pointer;">
+                        <option value="" disabled selected>Selecciona tu municipio...</option>
+                        <option value="Apodaca">Apodaca</option>
+                        <option value="Monterrey">Monterrey</option>
+                        <option value="San Nicolás">San Nicolás de los Garza</option>
+                        <option value="Guadalupe">Guadalupe</option>
+                        <option value="Escobedo">General Escobedo</option>
+                        <option value="Santa Catarina">Santa Catarina</option>
+                        <option value="San Pedro">San Pedro Garza García</option>
+                        <option value="Juárez">Juárez</option>
+                        <option value="Pesquería">Pesquería</option>
+                    </select>
+                </div>
+
+                <div class="grupo-checkout">
+                    <label>Código postal</label>
+                    <input type="text" class="entrada-checkout" placeholder="Ej. 66600" id="chk-cp">
+                </div>
+            </div>
+            
+            <div class="grupo-checkout mb-20">
+                <label>Referencias o indicaciones (Opcional)</label>
+                <textarea class="entrada-checkout" rows="2" id="chk-referencias" placeholder="Ej. Casa de dos pisos con reja blanca..."></textarea>
+            </div>
+            
+            <div class="grupo-checkout mb-20" style="margin-top: 15px; background: #ffffff; border: 1px solid var(--gris-borde); padding: 15px; border-radius: 10px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 1.1rem; color: var(--azul-primario);">
+                    <input type="checkbox" id="chk-envio-domicilio" style="width: 20px; height: 20px;">
+                    Quiero que el pedido llegue a mi casa (Envío a domicilio en N.L.)
+                </label>
+            </div>
+            
+            <button class="boton-pago-final" onclick="enviarPedidoWhatsApp()" style="background-color: #25D366; color: white;">
+                <i class="bi bi-whatsapp"></i> Enviar pedido por WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <div id="modal-universal" class="superposicion-modal" style="z-index: 9999;">
+        <div class="contenido-modal" style="background-color: #0f172a; max-width: 420px; text-align: center; padding: 35px 25px; border-radius: 20px; border: 2px solid #00e6cc; box-shadow: 0 0 20px rgba(0, 230, 204, 0.4), 0 15px 35px rgba(0,0,0,0.8);">
+            <div class="encabezado-modal" style="justify-content: center; border-bottom: none; margin-bottom: 5px; padding-bottom: 0;">
+                <span id="modal-uni-titulo" style="font-size: 1.8rem; font-weight: bold; color: #00e6cc; text-shadow: 0 0 10px rgba(0, 230, 204, 0.6);">Mensaje</span> 
+            </div>
+            
+            <p id="modal-uni-texto" style="margin-bottom: 25px; color: #f8fafc; font-size: 1.15rem; line-height: 1.5; font-weight: 500;">Texto descriptivo</p>
+            
+            <div id="modal-uni-inputs" style="display: flex; flex-direction: column; gap: 15px;"></div>
+
+            <div class="espacio-flex-10" style="margin-top: 30px; justify-content: center; gap: 15px;">
+                <button id="btn-modal-uni-aceptar" class="boton-modal" style="background-color: #facc15; color: #000; font-size: 1.05rem; padding: 12px 30px; border-radius: 25px; font-weight: bold; transition: 0.3s; box-shadow: 0 0 15px rgba(250, 204, 21, 0.4); border: none;">Aceptar</button>
+                <button id="btn-modal-uni-cancelar" onclick="cerrarModalUniversal()" class="boton-modal" style="background-color: #1e293b; color: white; font-size: 1.05rem; padding: 12px 30px; border-radius: 25px; transition: 0.3s; border: 1px solid #475569;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="JavaScript/conexion.js"></script>
+    <script src="JavaScript/login.js"></script>
+    <script src="JavaScript/carrito.js"></script>
+</body>
+</html>

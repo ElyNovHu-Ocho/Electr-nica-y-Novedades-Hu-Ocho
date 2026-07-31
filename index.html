@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electrónica y Novedades HU-OCHO - Inicio</title>
+    <link rel="icon" type="image/png" href="Imagenes/Icono.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="CSS/Estilos_globales.css">
+    <link rel="stylesheet" href="CSS/Tienda.css">
+</head>
+<body>
+    <header class="encabezado-principal">
+        <a href="index.html" class="contenedor-marca" onclick="volverAlCatalogo(); filtrarPorCategoria(null, document.getElementById('btn-cat-todos')); return false;">
+            <img src="Imagenes/Logo2.png" alt="Logo Electrónica Hu-Ocho" class="logo-marca-img">
+        </a>
+        
+        <div class="contenedor-busqueda">
+            <input type="text" class="entrada-busqueda" id="input-buscador" placeholder="Que deseas buscar?..." oninput="buscarProducto()" onkeydown="if(event.key === 'Enter') buscarProducto()">
+            <button class="boton-busqueda" onclick="buscarProducto()"><i class="bi bi-search"></i></button>
+        </div>
+        
+        <div class="menu-derecho-encabezado">
+            <div class="envoltura-desplegable">
+                <button class="caja-boton-carrito" onclick="gestionarClicCarrito()">
+                    <i class="bi bi-cart3"></i>
+                    <span class="insignia-contador-carrito" id="cart-global-badge">0</span>
+                </button>
+                <div class="vista-previa-carrito-desplegable" id="preview-flotante-carrito">
+                    <div class="encabezado-mini-carrito">Mi Carrito</div>
+                    <div id="mini-lista-carrito" class="lista-mini-carrito"></div>
+                    <div class="flex-entre texto-negrita mb-15">
+                        <span>Total estimado:</span>
+                        <span id="mini-total-precio">$0.00</span>
+                    </div>
+                    <a href="carrito.html" class="boton-ver-carrito">Ver Carrito Completo</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <hr class="divisor-encabezado">
+    
+    <nav class="barra-navegacion-categorias" id="barra-categorias-dinamica">
+        <a class="item-nav-categoria active" id="btn-cat-todos" onclick="volverAlCatalogo(); filtrarPorCategoria(null, this)">Inicio</a>
+    </nav>
+
+    <div class="banner-aviso-tienda">
+        <p class="texto-aviso" id="banner-aviso-tienda">Cargando avisos de la tienda...</p>
+    </div>
+
+    <main class="seccion-catalogo-principal">
+        <div id="vista-catalogo">
+            <div class="cuadricula-productos" id="contenedor-grid-catalogo"></div>
+        </div>
+        
+        <div id="vista-producto" class="contenedor-vista-producto" style="display: none;">
+            <button class="boton-regresar-catalogo" onclick="volverAlCatalogo()">
+                <i class="bi bi-arrow-left"></i> Volver al catálogo
+            </button>
+            <div class="cuadricula-detalle-producto">
+                <div class="contenedor-galeria">
+                    <div class="columna-miniaturas" id="prod-thumbnails"></div>
+                    <div class="columna-imagen-principal">
+                        <img id="prod-main-img" src="" alt="Producto">
+                    </div>
+                </div>
+                <div class="columna-informacion">
+                    <h2 id="prod-title">Nombre del Producto</h2>
+                    <div class="marca" id="prod-brand">Marca Genérica</div>
+                    <div class="caja-precio">
+                        <div class="precio-menudeo">Precio Menudeo <span id="prod-menudeo" class="valor-precio">$0.00</span></div>
+                        <div class="precio-mayoreo">Precio Mayoreo <span id="prod-mayoreo" class="valor-precio">$0.00</span></div>
+                    </div>
+                </div>
+                <div class="columna-acciones">
+                    <div class="etiqueta-estado-stock" id="prod-stock-status">Disponible</div>
+                    <div class="selector-cantidad">
+                        Cantidad: <input type="number" id="prod-qty" value="1" min="1"> u.
+                    </div>
+                    <button class="boton-comprar-ahora" onclick="comprarAhoraDirecto()">Comprar Ahora</button>
+                    <button class="boton-agregar-carrito" onclick="agregarAlCarritoDesdeDetalle()">
+                        <i class="bi bi-cart-plus icono-grande"></i> Agregar al Carrito
+                    </button>
+                </div>
+            </div>
+            <div class="caja-descripcion">
+                <h3>Descripcion</h3>
+                <div class="contenido-descripcion" id="prod-desc"></div>
+            </div>
+            <div class="caja-similares">
+                <h3>Productos Similares / Relacionados</h3>
+                <div class="cuadricula-similares" id="prod-similares"></div>
+            </div>
+        </div>
+    </main>
+
+    <div class="envoltura-pie-pagina">
+        <footer class="caja-oscura-pie-pagina">
+            <div class="cuadricula-columnas-pie-pagina">
+                <div>
+                    <div class="titulo-columna-pie-pagina">Lugar</div>
+                    <div id="foot-lugar" class="texto-pie-pagina">...</div>
+                </div>
+                <div>
+                    <div class="titulo-columna-pie-pagina">Contacto</div>
+                    <div id="foot-tel" class="mb-10">...</div>
+                    <div id="foot-correo">...</div>
+                </div>
+                <div>
+                    <div class="titulo-columna-pie-pagina">Horarios</div>
+                    <div id="foot-horarios" class="texto-pie-pagina">...</div>
+                </div>
+                <div>
+                    <div class="titulo-columna-pie-pagina">Redes Sociales</div>
+                    <a href="#" id="foot-fb-link" target="_blank" class="enlace-social-pie-pagina"><i class="bi bi-facebook"></i></a>
+                </div>
+            </div>
+        </footer>
+        <footer class="caja-inferior-pie-pagina">
+            <div class="titulo-inferior-pie-pagina" style="cursor: pointer;" onclick="ingresarComoAdminFooter(event)">HU - OCHO</div>
+            <div id="foot-descripcion">Tu tienda de confianza para electrónica y novedades en Apodaca. Calidad y precio al alcance de todos</div>
+        </footer>
+    </div>
+
+    <div class="superposicion-modal-auth" id="modal-auth">
+        <div class="caja-auth">
+            <h3 style="text-align: center; margin-bottom: 20px; color: #1a2430;">Acceso Administrativo</h3>
+            <div class="auth-form" id="form-auth-content"></div>
+            <div class="cerrar-auth" onclick="cerrarModalAuth()">Cerrar ventana</div>
+        </div>
+    </div>
+
+    <div id="modal-universal" class="superposicion-modal" style="z-index: 9999;">
+        <div class="contenido-modal" style="background-color: #0f172a; max-width: 420px; text-align: center; padding: 35px 25px; border-radius: 20px; border: 2px solid #00e6cc; box-shadow: 0 0 20px rgba(0, 230, 204, 0.4), 0 15px 35px rgba(0,0,0,0.8);">
+            <div class="encabezado-modal" style="justify-content: center; border-bottom: none; margin-bottom: 5px; padding-bottom: 0;">
+                <span id="modal-uni-titulo" style="font-size: 1.8rem; font-weight: bold; color: #00e6cc; text-shadow: 0 0 10px rgba(0, 230, 204, 0.6);">Mensaje</span> 
+            </div>
+            
+            <p id="modal-uni-texto" style="margin-bottom: 25px; color: #f8fafc; font-size: 1.15rem; line-height: 1.5; font-weight: 500;">Texto descriptivo</p>
+            
+            <div id="modal-uni-inputs" style="display: flex; flex-direction: column; gap: 15px;"></div>
+
+            <div class="espacio-flex-10" style="margin-top: 30px; justify-content: center; gap: 15px;">
+                <button id="btn-modal-uni-aceptar" class="boton-modal" style="background-color: #facc15; color: #000; font-size: 1.05rem; padding: 12px 30px; border-radius: 25px; font-weight: bold; transition: 0.3s; box-shadow: 0 0 15px rgba(250, 204, 21, 0.4); border: none;">Aceptar</button>
+                <button id="btn-modal-uni-cancelar" onclick="cerrarModalUniversal()" class="boton-modal" style="background-color: #1e293b; color: white; font-size: 1.05rem; padding: 12px 30px; border-radius: 25px; transition: 0.3s; border: 1px solid #475569;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="JavaScript/conexion.js"></script>
+    <script src="JavaScript/login.js"></script>
+    <script src="JavaScript/tienda.js"></script>
+    <script src="JavaScript/carrito.js"></script>
+</body>
+</html>

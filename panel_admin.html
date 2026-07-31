@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Electrónica Hu-Ocho</title>
+    <link rel="icon" type="image/png" href="Imagenes/Icono.png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="CSS/Estilos_globales.css">
+    <link rel="stylesheet" href="CSS/Admin.css">
+</head>
+<body>
+    <div class="encabezado-superior">
+        <img src="Imagenes/Logo2.png" alt="Logo Electrónica Hu-Ocho" class="logo-marca-img">
+        <button class="boton-menu-movil" onclick="toggleMenu()"><i class="bi bi-list"></i></button>
+    </div>
+
+    <div class="envoltura-principal">
+        <div class="barra-lateral" id="sidebar-menu">
+            <div class="navegacion-menu">
+                <div class="separador-menu"></div>
+                <div class="elemento-menu active" onclick="cambiarVista('inicio', this)">
+                    <div class="contenido-menu"><i class="bi bi-house"></i><span>Inicio / Dashboard</span></div>
+                </div>
+                <div class="separador-menu"></div>
+                <div class="elemento-menu" onclick="cambiarVista('agregar', this)">
+                    <div class="contenido-menu"><i class="bi bi-plus-circle"></i><span>Agregar Productos</span></div>
+                </div>
+                <div class="separador-menu"></div>
+                <div class="elemento-menu" onclick="cambiarVista('modificar', this)">
+                    <div class="contenido-menu"><i class="bi bi-pencil-square"></i><span>Modificar Productos</span></div>
+                </div>
+                <div class="separador-menu"></div>
+                <div class="elemento-menu" onclick="cambiarVista('categorias', this)">
+                    <div class="contenido-menu"><i class="bi bi-tags"></i><span class="texto-multilinea">Gestionar<br>Categorías</span></div>
+                </div>
+                <div class="separador-menu"></div>
+                <div class="elemento-menu" onclick="cambiarVista('configuracion', this)">
+                    <div class="contenido-menu"><i class="bi bi-gear"></i><span>Configuración</span></div>
+                </div>
+                <div class="separador-menu"></div>
+            </div>
+
+            <div class="elemento-menu elemento-menu-salir mb-20" onclick="cerrarSesionUsuario()">
+                <div class="contenido-menu sin-borde"><i class="bi bi-box-arrow-left"></i><span>Salir</span></div>
+            </div>
+            <div class="separador-menu mb-20"></div>
+        </div>
+
+        <div class="contenido-principal">
+            <div id="vista-inicio" class="panel-vista activa">
+                <h1 class="titulo-principal-admin">Panel de Administración</h1>
+                <div class="cuadricula-estadisticas">
+                    <div class="caja-estadistica"><div class="etiqueta-estadistica">Visitas de la Página web</div><div class="valor-estadistica" id="count-visitas">Cargando...</div></div>
+                    <div class="caja-estadistica sin-borde"><div class="etiqueta-estadistica">Ingresos Semanales</div><div class="valor-estadistica" id="count-ingresos">$0.00</div></div>
+                </div>
+                <div class="panel-tabla limite-tabla-800">
+                    <h3 class="titulo-alerta-inventario">Atención: Inventario Bajo</h3>
+                    <table class="tabla-personalizada">
+                        <thead><tr><th>Producto</th><th>Cantidad Restante</th></tr></thead>
+                        <tbody id="tabla-criticos"><tr><td colspan="2">Cargando...</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="vista-agregar" class="panel-vista">
+                <div class="titulo-encabezado-seccion">Agregar Nuevo Producto</div>
+                <div class="panel-formulario">
+                    <form id="form-agregar-producto">
+                        <div class="grupo-formulario"><label>Categoría</label><select id="add-categoria" class="control-formulario" required></select></div>
+                        <div class="grupo-formulario"><label>Nombre del Producto</label><input type="text" id="add-nombre" class="control-formulario" required></div>
+                        <div class="grupo-formulario"><label>Marca</label><input type="text" id="add-marca" class="control-formulario" required></div>
+                        <div class="grupo-formulario"><label>Descripción</label><input type="text" id="add-desc" class="control-formulario" required></div>
+                        
+                        <div class="cuadricula-responsiva-3">
+                            <div class="grupo-formulario"><label>Precio Menudeo</label><input type="number" id="add-menudeo" step="0.01" class="control-formulario" required></div>
+                            <div class="grupo-formulario"><label>Precio Mayoreo</label><input type="number" id="add-mayoreo" step="0.01" class="control-formulario" required></div>
+                            <div class="grupo-formulario"><label>Stock Inicial</label><input type="number" id="add-stock" class="control-formulario" required></div>
+                        </div>
+                        
+                        <div class="grupo-formulario">
+                            <label>Subir Imagen</label>
+                            <input type="file" id="add-imagen" accept="image/*" class="control-formulario fondo-blanco-pad" required>
+                            <div class="contenedor-vista-previa-imagen">
+                                <img id="img-preview" class="vista-previa-imagen" alt="Vista previa">
+                                <button type="button" id="btn-remove-img" class="boton-eliminar-img" onclick="quitarImagenAgregar()">X Eliminar Imagen</button>
+                            </div>
+                        </div>
+
+                        <div class="texto-centro margen-sup-15">
+                            <button type="submit" id="btn-subir" class="boton-enviar">Subir Producto</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="vista-modificar" class="panel-vista">
+                <div class="titulo-encabezado-seccion">Modificar Productos Existentes</div>
+                <div class="panel-tabla">
+                    <div class="desbordamiento-x-auto">
+                        <table class="tabla-personalizada">
+                            <thead>
+                                <tr><th>Nombre</th><th>Categoría</th><th>Marca</th><th>Menudeo</th><th>Mayoreo</th><th>Stock</th><th>Opciones</th></tr>
+                            </thead>
+                            <tbody id="tabla-productos-body"><tr><td colspan="7">Cargando...</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="vista-categorias" class="panel-vista">
+                <div class="titulo-encabezado-seccion">Gestionar Categorías de la Tienda</div>
+                <div class="panel-formulario limite-tabla-700">
+                    <div class="flex-entre lista-categorias-encabezado">
+                        <h3 class="titulo-cian-pequeno">Categorías Actuales</h3>
+                        <button class="boton-enviar boton-amarillo-pequeno" onclick="nuevaCategoria()">
+                            <i class="bi bi-plus-lg"></i> Agregar Nueva
+                        </button>
+                    </div>
+
+                    <div class="desbordamiento-x-auto">
+                        <table class="tabla-personalizada tabla-redondeada-oscura">
+                            <thead>
+                                <tr>
+                                    <th class="texto-izquierdo relleno-izq-20 ancho-70">Nombre de la Categoría</th>
+                                    <th class="ancho-30">Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lista-categorias"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="vista-configuracion" class="panel-vista">
+                <div class="titulo-encabezado-seccion">Configuración Global del Sistema</div>
+                <div class="panel-formulario limite-tabla-850">
+                    
+                    <h3 class="titulo-cian-subrayado">Lista de Administradores</h3>
+                    <div class="flex-responsivo-admin">
+                        <div class="ancho-30">
+                            <button class="boton-enviar boton-ancho-100" onclick="agregarNuevoAdmin()">+ Nuevo Admin</button>
+                        </div>
+                        <div class="ancho-100 desbordamiento-x-auto">
+                            <table class="tabla-personalizada tabla-ancho-100-oscura">
+                                <thead><tr><th>Nombre</th><th>Correo</th><th>Opciones</th></tr></thead>
+                                <tbody id="tabla-admins-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <form id="form-config-global">
+                        <h3 class="titulo-blanco-grande">Datos de Contacto y Tienda</h3>
+                        
+                        <div class="diseno-config-superior">
+                            <div class="columna-config">
+                                <div class="fila-config"><label>Facebook</label><input type="text" id="cfg-facebook" class="control-formulario"></div>
+                                <div class="fila-config"><label>Direccion</label><input type="text" id="cfg-direccion" class="control-formulario"></div>
+                                <div class="fila-config"><label>Correo</label><input type="email" id="cfg-correo" class="control-formulario"></div>
+                            </div>
+                            <div class="columna-config">
+                                <div class="fila-config"><label>Horarios</label><input type="text" id="cfg-horarios" class="control-formulario"></div>
+                                <div class="fila-config"><label>Num. Tel</label><input type="text" id="cfg-telefono" class="control-formulario"></div>
+                            </div>
+                        </div>
+
+                        <div class="divisor-config"></div>
+
+                        <div class="diseno-config-inferior">
+                            <div>
+                                <label class="titulo-config-inferior">Mínimo de Mayoreo</label>
+                                <input type="number" id="cfg-mayoreo" class="entrada-config-inferior">
+                            </div>
+                            <div>
+                                <label class="titulo-config-inferior">Aviso (Cuadro Azul Superior)</label>
+                                <input type="text" id="cfg-aviso" class="entrada-config-inferior">
+                            </div>
+                        </div>
+                        
+                        <div class="margen-sup-25">
+                            <label class="titulo-config-inferior texto-centro">Número de WhatsApp para pedidos (con código de país, ej: 528118168554)</label>
+                            <input type="text" id="cfg-whatsapp" class="entrada-config-inferior ancho-100" placeholder="Ej: 528118168554">
+                        </div>
+                        
+                        <div class="margen-sup-25">
+                            <label class="titulo-config-inferior texto-centro">Texto descriptivo del Footer (Abajo)</label>
+                            <input type="text" id="cfg-texto-footer" class="entrada-config-inferior ancho-100" placeholder="Ej: Tu tienda de confianza para electrónica...">
+                        </div>
+
+                        <div class="texto-centro margen-sup-35">
+                            <button type="submit" class="boton-enviar boton-actualizar-grande">Actualizar Todo</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+
+    <div id="modal-editar" class="superposicion-modal">
+        <div class="contenido-modal modal-desplazable" style="background-color: #0f172a; max-width: 550px; padding: 30px 40px; border-radius: 15px; border: 2px solid #0ea5e9; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;">
+            
+            <div class="encabezado-modal" style="color: #0ea5e9; border-bottom: 1px solid #334155; margin-bottom: 25px; padding-bottom: 15px;">
+                <span style="font-size: 1.6rem; font-weight: bold;">Editar Producto</span> 
+                <span class="cerrar-modal" onclick="cerrarModal('modal-editar')" style="color: #ef4444; font-size: 1.6rem; cursor: pointer;">X</span>
+            </div>
+
+            <input type="hidden" id="edit-id">
+            <input type="hidden" id="edit-imagen-actual"> 
+            
+            <div style="text-align: left;">
+                <label style="display:block; font-weight:bold; color:#cbd5e1; margin-bottom:8px;">Nombre del Producto:</label> 
+                <input type="text" id="edit-nombre" style="width:100%; padding:12px; border-radius:8px; border:1px solid #475569; background:#1e293b; color:white; margin-bottom:20px; outline:none;">
+                
+                <label style="display:block; font-weight:bold; color:#cbd5e1; margin-bottom:8px;">Marca:</label> 
+                <input type="text" id="edit-marca" style="width:100%; padding:12px; border-radius:8px; border:1px solid #475569; background:#1e293b; color:white; margin-bottom:20px; outline:none;">
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <label style="display:block; font-weight:bold; color:#cbd5e1; margin-bottom:8px;">Precio Menudeo:</label> 
+                        <input type="number" step="0.01" id="edit-menudeo" style="width:100%; padding:12px; border-radius:8px; border:1px solid #475569; background:#1e293b; color:white; outline:none;">
+                    </div>
+                    <div>
+                        <label style="display:block; font-weight:bold; color:#cbd5e1; margin-bottom:8px;">Precio Mayoreo:</label> 
+                        <input type="number" step="0.01" id="edit-mayoreo" style="width:100%; padding:12px; border-radius:8px; border:1px solid #475569; background:#1e293b; color:white; outline:none;">
+                    </div>
+                </div>
+                
+                <label style="display:block; font-weight:bold; color:#cbd5e1; margin-bottom:8px;">Agregar Imágenes (Se sumarán a las actuales):</label> 
+                <input type="file" id="edit-imagen" accept="image/*" multiple style="width:100%; padding:15px; border-radius:8px; border:2px dashed #0ea5e9; background:#0f172a; color:#cbd5e1; margin-bottom:20px; cursor:pointer;">
+                
+                <div id="edit-gallery-preview" style="display:flex; gap:15px; flex-wrap:wrap; margin-bottom:30px; justify-content:center;"></div>
+            </div>
+
+            <div style="display:flex; gap:15px; justify-content:center;">
+                <button id="btn-guardar-edicion" onclick="guardarEdicion()" style="background:#10b981; color:white; border:none; padding:15px 40px; border-radius:30px; font-weight:bold; font-size:1.2rem; cursor:pointer; width:100%; transition:0.3s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-stock" class="superposicion-modal">
+        <div class="contenido-modal">
+            <div class="encabezado-modal"><span id="titulo-stock">Stock</span> <span class="cerrar-modal" onclick="cerrarModal('modal-stock')">X</span></div>
+            <input type="hidden" id="stock-id">
+            <input type="number" id="input-cantidad" class="control-formulario mb-20" placeholder="Cantidad de piezas">
+            <div class="espacio-flex-10">
+                <button onclick="ejecutarStock('sumar')" class="boton-modal boton-verde-flex">+ Sumar</button>
+                <button onclick="ejecutarStock('restar')" class="boton-modal boton-amarillo-flex">- Restar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-universal" class="superposicion-modal" style="z-index: 9999;">
+        <div class="contenido-modal" style="background-color: #0f172a; max-width: 420px; text-align: center; padding: 35px 25px; border-radius: 20px; border: 2px solid #00e6cc; box-shadow: 0 0 20px rgba(0, 230, 204, 0.4), 0 15px 35px rgba(0,0,0,0.8);">
+            <div class="encabezado-modal" style="justify-content: center; border-bottom: none; margin-bottom: 5px; padding-bottom: 0;">
+                <span id="modal-uni-titulo" style="font-size: 1.8rem; font-weight: bold; color: #00e6cc; text-shadow: 0 0 10px rgba(0, 230, 204, 0.6);">Mensaje</span> 
+            </div>
+            
+            <p id="modal-uni-texto" style="margin-bottom: 25px; color: #f8fafc; font-size: 1.15rem; line-height: 1.5; font-weight: 500;">Texto descriptivo</p>
+            
+            <div id="modal-uni-inputs" style="display: flex; flex-direction: column; gap: 15px;"></div>
+
+            <div class="espacio-flex-10" style="margin-top: 30px; justify-content: center; gap: 15px;">
+                <button id="btn-modal-uni-aceptar" class="boton-modal" style="background-color: #facc15; color: #000; font-size: 1.05rem; padding: 12px 30px; border-radius: 25px; font-weight: bold; transition: 0.3s; box-shadow: 0 0 15px rgba(250, 204, 21, 0.4); border: none;">Aceptar</button>
+                <button id="btn-modal-uni-cancelar" onclick="cerrarModalUniversal()" class="boton-modal" style="background-color: #1e293b; color: white; font-size: 1.05rem; padding: 12px 30px; border-radius: 25px; transition: 0.3s; border: 1px solid #475569;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js"></script>
+    <script src="JavaScript/conexion.js"></script>
+    <script src="JavaScript/login.js"></script>
+    <script src="JavaScript/admin.js"></script>
+</body>
+</html>
