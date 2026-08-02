@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración - Electrónica Hu-Ocho Tech</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #e9f1f7; color: #333; overflow: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: 240px; background-color: #2b4c6f; color: white; display: flex; flex-direction: column; box-shadow: 3px 0 10px rgba(0,0,0,0.15); flex-shrink: 0; }
+        .logo-container { padding: 15px; background-color: #1e354f; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #2b4c6f; }
+        .logo-icon { font-size: 2rem; color: #ffffff; }
+        .logo-text { font-size: 0.95rem; font-weight: bold; line-height: 1.2; letter-spacing: 0.5px; }
+        .logo-text span { display: block; font-size: 1.15rem; color: #a1c4fd; }
+        .menu-nav { list-style: none; display: flex; flex-direction: column; padding: 15px 0; flex-grow: 1; }
+        .menu-item a { display: block; padding: 14px 20px; color: #e2f0fd; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s ease; }
+        .menu-item a:hover { background-color: #375f8a; color: #ffffff; padding-left: 25px; }
+        .menu-item.active a { background-color: #4172a3; color: white; border-left: 5px solid #a1c4fd; font-weight: bold; }
+        .menu-item-logout a { color: #ff9999; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto; font-weight: bold; }
+
+        /* ÁREA PRINCIPAL */
+        .main-content { flex-grow: 1; padding: 20px 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; background-color: #e9f1f7; }
+        .section-header-title { background-color: #1a2430; color: #00e6cc; width: 100%; max-width: 850px; text-align: center; padding: 10px; border-radius: 25px; font-size: 1.5rem; font-weight: bold; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 15px; border: 2px solid #00e6cc; }
+
+        /* PANEL CONFIGURACIÓN */
+        .config-panel { width: 100%; max-width: 850px; background-color: #1a2430; padding: 25px 40px; border-radius: 40px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); border: 1px solid #2b4c6f; color: white; }
+        .tabs-header { display: flex; justify-content: space-around; border-bottom: 1px solid #3d4f63; padding-bottom: 12px; margin-bottom: 20px; }
+        .tab-link { font-size: 1.1rem; font-weight: bold; cursor: pointer; text-decoration: underline; }
+        .tab-perfil { color: #00e6cc; }
+        .tab-usuario { color: #facc15; }
+
+        .block-title { text-align: center; font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; }
+
+        /* SECCIÓN ADMINS */
+        .admin-section { display: grid; grid-template-columns: 1.2fr 2fr; gap: 20px; align-items: center; margin-bottom: 25px; }
+        .admin-buttons { display: flex; flex-direction: column; gap: 15px; }
+        .admin-action-text { color: #ffffff; font-size: 0.95rem; font-weight: bold; cursor: pointer; text-align: left; line-height: 1.3; }
+        .admin-action-text:hover { color: #00e6cc; text-decoration: underline; }
+
+        .mini-table-box { background-color: #0f172a; border-radius: 20px; padding: 10px; border: 1px solid #334155; }
+        .mini-table { width: 100%; border-collapse: collapse; color: white; font-size: 0.85rem; }
+        .mini-table th { padding: 8px; border: 1px solid #475569; background-color: #1e293b; font-weight: bold; }
+        .mini-table td { padding: 8px; border: 1px solid #334155; text-align: center; }
+
+        .separator { border-top: 1px solid #3d4f63; margin: 20px 0; }
+
+        /* CONTACTO GRID */
+        .contacto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 40px; margin-bottom: 25px; }
+        .form-group-row { display: flex; align-items: center; justify-content: space-between; }
+        .form-group-row label { font-size: 1rem; font-weight: bold; width: 100px; flex-shrink: 0; }
+        .form-control-oval { flex-grow: 1; background-color: #ffffff; color: #333333; border: none; padding: 10px 20px; font-size: 0.95rem; border-radius: 25px; outline: none; }
+
+        /* SECCIÓN INFERIOR */
+        .bottom-config-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; text-align: center; margin-bottom: 25px; }
+        .bottom-title { font-size: 1rem; font-weight: bold; margin-bottom: 10px; }
+        .textarea-aviso { width: 100%; background-color: #ffffff; color: #333333; border: none; padding: 10px 15px; font-size: 0.85rem; border-radius: 20px; height: 50px; resize: none; text-align: center; font-weight: 500; }
+
+        .btn-save-container { display: flex; justify-content: center; }
+        .btn-save { background-color: #f39c12; color: #ffffff; border: none; padding: 10px 45px; font-size: 1.1rem; font-weight: bold; border-radius: 25px; cursor: pointer; }
+        .btn-save:hover { background-color: #e67e22; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">🎮</div>
+            <div class="logo-text">ELECTRÓNICA<span>HU-OCHO</span></div>
+        </div>
+        <ul class="menu-nav">
+            <li class="menu-item"><a href="dashboard.html">Inicio / Dashboard</a></li>
+            <li class="menu-item"><a href="agregar_productos.html">Agregar productos</a></li>
+            <li class="menu-item"><a href="modificar_productos.html">Modificar Productos</a></li>
+            <li class="menu-item"><a href="categorias.html">Gestionar Categorías</a></li>
+            <li class="menu-item"><a href="historial_pedidos.html">Historial de Pedidos</a></li>
+            <li class="menu-item active"><a href="configuracion.html">Configuración</a></li>
+            <li class="menu-item menu-item-logout"><a href="index.html">Salir</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="section-header-title">Configuración</div>
+        <div class="config-panel">
+            <div class="tabs-header">
+                <span class="tab-link tab-perfil">Perfil</span>
+                <span class="tab-link tab-usuario" onclick="cambiarClaveAdmin()">Actualizar Usuario</span>
+            </div>
+
+            <div class="block-title">Lista de Administradores</div>
+            <div class="admin-section">
+                <div class="admin-buttons">
+                    <div class="admin-action-text" onclick="agregarNuevoAdmin()">Registrar Nuevo<br>Administrador</div>
+                    <div class="admin-action-text" onclick="eliminarAdmin()">Eliminar por Correo<br>Administrador</div>
+                </div>
+                <div class="mini-table-box">
+                    <table class="mini-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-admins-body">
+                            <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="separator"></div>
+            <div class="block-title" style="text-align: left; margin-bottom: 20px;">Datos de Contacto</div>
+            
+            <form id="form-config-global">
+                <div class="contacto-grid">
+                    <div class="form-group-row">
+                        <label>Facebook</label>
+                        <input type="text" id="cfg-facebook" class="form-control-oval" placeholder="Hu-Ocho Tech">
+                    </div>
+                    <div class="form-group-row">
+                        <label>Horarios</label>
+                        <input type="text" id="cfg-horarios" class="form-control-oval" placeholder="9:00 AM - 6:00 PM">
+                    </div>
+                    <div class="form-group-row">
+                        <label>Dirección</label>
+                        <input type="text" id="cfg-direccion" class="form-control-oval" placeholder="Apodaca">
+                    </div>
+                    <div class="form-group-row">
+                        <label>Núm. Tel.</label>
+                        <input type="text" id="cfg-telefono" class="form-control-oval" placeholder="81XX...">
+                    </div>
+                    <div class="form-group-row">
+                        <label>Correo</label>
+                        <input type="email" id="cfg-correo" class="form-control-oval" placeholder="correo@...">
+                    </div>
+                </div>
+
+                <div class="bottom-config-grid">
+                    <div>
+                        <div class="bottom-title">Mínimo de Mayoreo</div>
+                        <input type="number" id="cfg-mayoreo" class="form-control-oval" style="text-align: center; width: 100%;" value="6">
+                    </div>
+                    <div>
+                        <div class="bottom-title">Aviso de la Tienda</div>
+                        <textarea id="cfg-aviso" class="textarea-aviso"></textarea>
+                    </div>
+                </div>
+
+                <div class="btn-save-container">
+                    <button type="submit" class="btn-save">Actualizar Todo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://lzqltchzefuttbvhcrlq.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWx0Y2h6ZWZ1dHRidmhjcmxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTA3ODMsImV4cCI6MjA5NDc4Njc4M30.z8IFypXSV7j5w396Jk9B7q9z2xTT4RG-TFzFhVpED6c";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function cargarAdministradores() {
+            try {
+                // Nombre de tabla cambiado a minúsculas
+                const { data: admins } = await supabaseClient.from('administrador').select('*');
+                const tbody = document.getElementById('tabla-admins-body');
+                tbody.innerHTML = '';
+                
+                if(admins) {
+                    admins.forEach(a => {
+                        // Propiedades del objeto mapeadas en minúsculas
+                        tbody.innerHTML += `<tr><td>${a.nombre}</td><td>${a.correo}</td><td style="color:#f87171; cursor:pointer;" onclick="eliminarAdminPorId(${a.id_administrador})">Quitar</td></tr>`;
+                    });
+                }
+                while(tbody.rows.length < 3) { tbody.innerHTML += '<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>'; }
+            } catch (e) {}
+        }
+
+        async function cargarConfiguracionGlobal() {
+            try {
+                // Nombre de tabla y columna clave primaria cambiadas a minúsculas
+                const { data } = await supabaseClient.from('configuracion').select('*').eq('id_config', 1).single();
+                if (data) {
+                    document.getElementById('cfg-facebook').value = data.facebook || '';
+                    document.getElementById('cfg-horarios').value = data.horarios || '';
+                    document.getElementById('cfg-direccion').value = data.direccion || '';
+                    document.getElementById('cfg-telefono').value = data.telefono_contacto || '';
+                    document.getElementById('cfg-correo').value = data.correo_contactos || data.correo_contacto || '';
+                    document.getElementById('cfg-mayoreo').value = data.minimo_mayoreo || 6;
+                    document.getElementById('cfg-aviso').value = data.aviso_tienda || '';
+                }
+            } catch (e) {}
+        }
+
+        document.getElementById('form-config-global').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const updData = {
+                facebook: document.getElementById('cfg-facebook').value,
+                horarios: document.getElementById('cfg-horarios').value,
+                direccion: document.getElementById('cfg-direccion').value,
+                telefono_contacto: document.getElementById('cfg-telefono').value,
+                correo_contacto: document.getElementById('cfg-correo').value,
+                minimo_mayoreo: parseInt(document.getElementById('cfg-mayoreo').value),
+                aviso_tienda: document.getElementById('cfg-aviso').value
+            };
+            
+            // Tablas y filtros en minúsculas
+            const { error } = await supabaseClient.from('configuracion').update(updData).eq('id_config', 1);
+            if(error) await supabaseClient.from('configuracion').insert([{id_config: 1, ...updData}]);
+            alert("¡Ajustes actualizados!");
+        });
+
+        async function agregarNuevoAdmin() {
+            const nom = prompt("Nombre:");
+            const corr = prompt("Correo:");
+            const pass = prompt("Clave:");
+            if(nom && corr && pass) {
+                await supabaseClient.from('administrador').insert([{ nombre: nom, correo: corr, contrasena: pass }]);
+                cargarAdministradores();
+            }
+        }
+
+        async function eliminarAdmin() {
+            const corr = prompt("Correo del administrador a remover:");
+            if(corr) {
+                await supabaseClient.from('administrador').delete().eq('correo', corr);
+                cargarAdministradores();
+            }
+        }
+
+        async function eliminarAdminPorId(id) {
+            if(confirm("¿Remover administrador?")) {
+                await supabaseClient.from('administrador').delete().eq('id_administrador', id);
+                cargarAdministradores();
+            }
+        }
+
+        function cambiarClaveAdmin() { prompt("Nueva contraseña:"); }
+
+        window.onload = () => { cargarAdministradores(); cargarConfiguracionGlobal(); };
+    </script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Categorías - Hu-Ocho Tech</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #e9f1f7; color: #333; overflow: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: 240px; background-color: #2b4c6f; color: white; display: flex; flex-direction: column; box-shadow: 3px 0 10px rgba(0,0,0,0.15); flex-shrink: 0; }
+        .logo-container { padding: 15px; background-color: #1e354f; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #2b4c6f; }
+        .logo-icon { font-size: 2rem; color: #ffffff; }
+        .logo-text { font-size: 0.95rem; font-weight: bold; line-height: 1.2; letter-spacing: 0.5px; }
+        .logo-text span { display: block; font-size: 1.15rem; color: #a1c4fd; }
+        .menu-nav { list-style: none; display: flex; flex-direction: column; padding: 15px 0; flex-grow: 1; }
+        .menu-item a { display: block; padding: 14px 20px; color: #e2f0fd; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s ease; }
+        .menu-item a:hover { background-color: #375f8a; color: #ffffff; padding-left: 25px; }
+        .menu-item.active a { background-color: #4172a3; color: white; border-left: 5px solid #a1c4fd; font-weight: bold; }
+        .menu-item-logout a { color: #ff9999; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto; font-weight: bold; }
+
+        /* ÁREA PRINCIPAL */
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; background-color: #e9f1f7; }
+        .section-header-title { background-color: #1a2430; color: #ffffff; width: 100%; max-width: 600px; text-align: center; padding: 12px; border-radius: 25px; font-size: 1.6rem; font-weight: bold; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 30px; border: 2px solid #00e6cc; }
+
+        /* PANEL DE CATEGORÍAS */
+        .categories-panel { width: 100%; max-width: 750px; background-color: #1a2430; padding: 30px 40px; border-radius: 40px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); border: 1px solid #2b4c6f; display: grid; grid-template-columns: 2fr 1fr; gap: 20px; position: relative; }
+        
+        .table-wrapper { width: 100%; }
+        .categories-table { width: 100%; border-collapse: collapse; color: white; }
+        .categories-table th { padding: 15px; border: 1px solid #ffffff; font-size: 1.1rem; text-decoration: underline; font-weight: bold; color: #ffffff; text-align: center; }
+        .categories-table td { padding: 15px; border: 1px solid #ffffff; text-align: center; font-size: 1rem; height: 60px; }
+
+        /* Botón Agregar Lateral */
+        .btn-agregar-box { display: flex; justify-content: center; align-items: flex-start; padding-top: 55px; }
+        .btn-agregar-side { color: #facc15; font-size: 1.2rem; font-weight: bold; text-decoration: underline; cursor: pointer; }
+        .btn-agregar-side:hover { opacity: 0.8; }
+
+        /* Links de Opciones */
+        .action-link { display: block; text-decoration: underline; font-weight: bold; cursor: pointer; margin: 4px 0; font-size: 0.95rem; }
+        .act-modificar { color: #4ade80; }
+        .act-eliminar { color: #f87171; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">🎮</div>
+            <div class="logo-text">ELECTRÓNICA<span>HU-OCHO</span></div>
+        </div>
+        <ul class="menu-nav">
+            <li class="menu-item"><a href="dashboard.html">Inicio / Dashboard</a></li>
+            <li class="menu-item"><a href="agregar_productos.html">Agregar productos</a></li>
+            <li class="menu-item"><a href="modificar_productos.html">Modificar Productos</a></li>
+            <li class="menu-item active"><a href="categorias.html">Gestionar Categorías</a></li>
+            <li class="menu-item"><a href="historial_pedidos.html">Historial de Pedidos</a></li>
+            <li class="menu-item"><a href="configuracion.html">Configuración</a></li>
+            <li class="menu-item menu-item-logout"><a href="index.html">Salir</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="section-header-title">Gestionar Categorías</div>
+        <div class="categories-panel">
+            <div class="table-wrapper">
+                <table class="categories-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 55%;">Categorías</th>
+                            <th style="width: 45%;">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-categorias">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="btn-agregar-box">
+                <span class="btn-agregar-side" onclick="nuevaCategoria()">Agregar</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://lzqltchzefuttbvhcrlq.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWx0Y2h6ZWZ1dHRidmhjcmxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTA3ODMsImV4cCI6MjA5NDc4Njc4M30.z8IFypXSV7j5w396Jk9B7q9z2xTT4RG-TFzFhVpED6c";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        async function cargarCategorias() {
+            // Nombre de tabla y columna de ordenamiento en minúsculas
+            const { data, error } = await supabaseClient
+                .from('categorias')
+                .select('*')
+                .order('id_categorias', { ascending: true });
+
+            if (error) {
+                console.error("Error al cargar categorías:", error);
+                return;
+            }
+
+            const tbody = document.getElementById('lista-categorias');
+            tbody.innerHTML = '';
+
+            const filasAMostrar = Math.max(data.length, 5);
+
+            for (let i = 0; i < filasAMostrar; i++) {
+                const cat = data[i];
+                if (cat) {
+                    // Columnas del objeto mapeadas en minúsculas
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${cat.nombre_categoria}</td>
+                            <td>
+                                <span class="action-link act-modificar" onclick="editarCategoria(${cat.id_categorias}, '${cat.nombre_categoria}')">Modificar</span>
+                                <span class="action-link act-eliminar" onclick="borrarCategoria(${cat.id_categorias}, '${cat.nombre_categoria}')">Eliminar</span>
+                            </td>
+                        </tr>
+                    `;
+                } else {
+                    tbody.innerHTML += `<tr><td>&nbsp;</td><td>&nbsp;</td></tr>`;
+                }
+            }
+        }
+
+        async function nuevaCategoria() {
+            const nombre = prompt("Nombre de la nueva categoría:");
+            if (nombre && nombre.trim() !== "") {
+                const { error } = await supabaseClient
+                    .from('categorias')
+                    .insert([{ nombre_categoria: nombre.trim() }]);
+                
+                if (error) alert("Error al agregar la categoría.");
+                else cargarCategorias();
+            }
+        }
+
+        async function editarCategoria(id, nombreActual) {
+            const nuevoNombre = prompt("Modificar nombre de categoría:", nombreActual);
+            if (nuevoNombre && nuevoNombre.trim() !== "" && nuevoNombre !== nombreActual) {
+                const { error } = await supabaseClient
+                    .from('categorias')
+                    .update({ nombre_categoria: nuevoNombre.trim() })
+                    .eq('id_categorias', id);
+
+                if (error) alert("Error al modificar.");
+                else cargarCategorias();
+            }
+        }
+
+        async function borrarCategoria(id, nombre) {
+            if (confirm(`¿Eliminar la categoría "${nombre}"?`)) {
+                const { error } = await supabaseClient
+                    .from('categorias')
+                    .delete()
+                    .eq('id_categorias', id);
+
+                if (error) alert("No se puede borrar: Existen productos vinculados a esta categoría.");
+                else cargarCategorias();
+            }
+        }
+
+        window.onload = cargarCategorias;
+    </script>
+</body>
+</html>

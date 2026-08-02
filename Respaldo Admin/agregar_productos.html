@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Productos - Electrónica Hu-Ocho Tech</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { display: flex; height: 100vh; background-color: #e9f1f7; color: #333; overflow: hidden; }
+
+        /* ==================== BARRA LATERAL (SIDEBAR) ==================== */
+        .sidebar { width: 240px; background-color: #2b4c6f; color: white; display: flex; flex-direction: column; box-shadow: 3px 0 10px rgba(0,0,0,0.15); flex-shrink: 0; }
+        
+        /* Encabezado del Logo */
+        .logo-container { padding: 15px; background-color: #1e354f; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #2b4c6f; }
+        .logo-icon { font-size: 2rem; color: #ffffff; }
+        .logo-text { font-size: 0.95rem; font-weight: bold; line-height: 1.2; letter-spacing: 0.5px; }
+        .logo-text span { display: block; font-size: 1.15rem; color: #a1c4fd; }
+
+        /* Menú de Opciones */
+        .menu-nav { list-style: none; display: flex; flex-direction: column; padding: 15px 0; flex-grow: 1; }
+        .menu-item a { display: block; padding: 14px 20px; color: #e2f0fd; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s ease; }
+        .menu-item a:hover { background-color: #375f8a; color: #ffffff; padding-left: 25px; }
+        .menu-item.active a { background-color: #4172a3; color: white; border-left: 5px solid #a1c4fd; font-weight: bold; }
+        
+        /* Botón Salir al fondo */
+        .menu-item-logout a { color: #ff9999; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto; font-weight: bold; }
+        .menu-item-logout a:hover { background-color: #993333; color: white; }
+
+        /* ==================== ÁREA PRINCIPAL CONTENEDORA ==================== */
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #e9f1f7; }
+
+        /* Título superior de la sección */
+        .section-header-title { background-color: #1e354f; color: #ffffff; width: 100%; max-width: 750px; text-align: center; padding: 12px; border-radius: 25px; font-size: 1.6rem; font-weight: bold; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); text-shadow: 0 0 10px rgba(0, 230, 204, 0.5); margin-bottom: 20px; border: 1px solid #00e6cc; }
+
+        /* ==================== PANEL DEL FORMULARIO ==================== */
+        .form-panel { width: 100%; max-width: 750px; background-color: #1a2430; padding: 30px 40px; border-radius: 35px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); border: 1px solid #2b4c6f; }
+        
+        .form-group { margin-bottom: 18px; display: flex; flex-direction: column; }
+        .form-group label { color: #ffffff; font-size: 1.05rem; font-weight: bold; margin-bottom: 8px; padding-left: 5px; }
+        
+        /* Inputs estilizados */
+        .form-control { width: 100%; background-color: #ffffff; color: #333333; border: none; padding: 12px 20px; font-size: 1rem; border-radius: 25px; outline: none; box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); transition: all 0.3s; }
+        .form-control:focus { box-sizing: border-box; box-shadow: 0 0 8px #00e6cc; }
+        
+        select.form-control { appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg fill='%231a2430' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>"); background-repeat: no-repeat; background-position-x: 96%; background-position-y: 50%; }
+
+        /* Fila inferior de tres columnas */
+        .form-row-triple { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+
+        /* Botón Subir Producto */
+        .btn-submit-container { display: flex; justify-content: center; margin-top: 10px; }
+        .btn-submit { background-color: #f39c12; color: #ffffff; border: none; padding: 12px 50px; font-size: 1.15rem; font-weight: bold; border-radius: 25px; cursor: pointer; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4); transition: all 0.3s ease; }
+        .btn-submit:hover { background-color: #e67e22; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(243, 156, 18, 0.6); }
+        .btn-submit:disabled { background-color: #555555; color: #888888; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        /* Input de tipo archivo personalizado */
+        .file-input-wrapper { display: flex; align-items: center; gap: 15px; }
+        .file-label-custom { background-color: #2b4c6f; color: white; padding: 8px 18px; border-radius: 15px; font-size: 0.9rem; cursor: pointer; transition: 0.2s; font-weight: 500; }
+        .file-label-custom:hover { background-color: #375f8a; }
+        #file-chosen { color: #a1c4fd; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">🎮</div>
+            <div class="logo-text">
+                ELECTRÓNICA
+                <span>HU-OCHO</span>
+            </div>
+        </div>
+
+        <ul class="menu-nav">
+            <li class="menu-item"><a href="dashboard.html">Inicio / Dashboard</a></li>
+            <li class="menu-item active"><a href="agregar_productos.html">Agregar productos</a></li>
+            <li class="menu-item"><a href="modificar_productos.html">Modificar Productos</a></li>
+            <li class="menu-item"><a href="categorias.html">Gestionar Categorías</a></li>
+            <li class="menu-item"><a href="historial_pedidos.html">Historial de Pedidos</a></li>
+            <li class="menu-item"><a href="configuracion.html">Configuración</a></li>
+            <li class="menu-item menu-item-logout"><a href="index.html">Salir</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="section-header-title">Agregar productos</div>
+
+        <div class="form-panel">
+            <form id="form-agregar-producto">
+                
+                <div class="form-group">
+                    <label for="id_categorias">Categoria/Tipo</label>
+                    <select id="id_categorias" class="form-control" required>
+                        <option value="">Cargando categorías de Supabase...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="nombre">Nombre del Producto</label>
+                    <input type="text" id="nombre" class="form-control" placeholder="Ej. Tarjeta de Desarrollo Uno R3" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="marca">Nombre de la Marca</label>
+                    <input type="text" id="marca" class="form-control" placeholder="Ej. Genérico / Original" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <input type="text" id="descripcion" class="form-control" placeholder="Especificaciones, voltaje, uso técnico..." required>
+                </div>
+
+                <div class="form-row-triple">
+                    <div class="form-group">
+                        <label for="precio_menudeo">Precio Menudeo</label>
+                        <input type="number" id="precio_menudeo" step="0.01" class="form-control" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="precio_mayoreo">Precio Mayoreo</label>
+                        <input type="number" id="precio_mayoreo" step="0.01" class="form-control" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="stock">Cantidad / Stock</label>
+                        <input type="number" id="stock" class="form-control" placeholder="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label style="margin-bottom: 12px;">Subir imágenes</label>
+                    <div class="file-input-wrapper">
+                        <label for="imagen_archivo" class="file-label-custom">Seleccionar archivo...</label>
+                        <input type="file" id="imagen_archivo" accept="image/*" style="display: none;" required>
+                        <span id="file-chosen">Ningún archivo seleccionado</span>
+                    </div>
+                </div>
+
+                <div class="btn-submit-container">
+                    <button type="submit" id="btn-subir" class="btn-submit">Subir Producto</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js"></script>
+    
+    <script>
+        const SUPABASE_URL = "https://lzqltchzefuttbvhcrlq.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWx0Y2h6ZWZ1dHRidmhjcmxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTA3ODMsImV4cCI6MjA5NDc4Njc4M30.z8IFypXSV7j5w396Jk9B7q9z2xTT4RG-TFzFhVpED6c";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const form = document.getElementById('form-agregar-producto');
+        const selectCat = document.getElementById('id_categorias');
+        const fileInput = document.getElementById('imagen_archivo');
+        const fileChosen = document.getElementById('file-chosen');
+        const btnSubir = document.getElementById('btn-subir');
+
+        fileInput.addEventListener('change', function(){
+            fileChosen.textContent = this.files[0] ? this.files[0].name : "Ningún archivo seleccionado";
+        });
+
+        // 1. CARGAR LAS CATEGORÍAS REALES DESDE SUPABASE
+        async function cargarCategoriasSelect() {
+            try {
+                const { data: categorias, error } = await supabaseClient
+                    .from('categorias')
+                    .select('*')
+                    .order('nombre_categoria', { ascending: true });
+
+                if (error) throw error;
+
+                if (!categorias || categorias.length === 0) {
+                    selectCat.innerHTML = '<option value="">⚠️ Crea categorías primero</option>';
+                    return;
+                }
+
+                selectCat.innerHTML = '<option value="">-- Elige una Categoría --</option>';
+                categorias.forEach(cat => {
+                    selectCat.innerHTML += `<option value="${cat.id_categorias}">${cat.nombre_categoria}</option>`;
+                });
+            } catch (err) {
+                selectCat.innerHTML = '<option value="">Error al cargar categorías</option>';
+            }
+        }
+
+        // 2. ESCUCHAR EL ENVÍO DEL FORMULARIO
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            btnSubir.disabled = true;
+            btnSubir.innerText = "Validando archivo...";
+
+            const file = fileInput.files[0];
+            let archivoParaSubir = file; 
+            let publicImagenUrl = "";
+
+            try {
+                if (file) {
+                    // Control de formato extra por código
+                    if (!file.type.startsWith('image/')) {
+                        alert("❌ Error: El archivo seleccionado no es una imagen válida. No puedes subir archivos ZIP, PDF u otros formatos.");
+                        btnSubir.disabled = false;
+                        btnSubir.innerText = "Subir Producto";
+                        return;
+                    }
+
+                    btnSubir.innerText = "Comprimiendo imagen...";
+
+                    const opcionesCompresion = {
+                        maxSizeMB: 0.35,          
+                        maxWidthOrHeight: 1200,  
+                        useWebWorker: true,
+                        fileType: 'image/webp'   
+                    };
+
+                    try {
+                        console.log(`Peso original: ${(file.size / 1024 / 1024).toFixed(2)} MB`);
+                        archivoParaSubir = await imageCompression(file, opcionesCompresion);
+                        console.log(`Peso optimizado final: ${(archivoParaSubir.size / 1024).toFixed(0)} KB`);
+                    } catch (errorCompresion) {
+                        console.error("Error al comprimir, se usará el archivo original:", errorCompresion);
+                        archivoParaSubir = file; 
+                    }
+
+                    btnSubir.innerText = "Subiendo a Supabase...";
+                    
+                    const nombreLimpio = Date.now() + "_prod";
+                    const fileName = `${nombreLimpio}.webp`;
+                    
+                    // CORRECCIÓN CRÍTICA: Apuntar al bucket exacto 'imagenes' en minúsculas y plural
+                    const { error: storageError } = await supabaseClient.storage
+                        .from('imagenes')
+                        .upload(fileName, archivoParaSubir, {
+                            contentType: 'image/webp'
+                        });
+
+                    if (storageError) throw storageError;
+
+                    // CORRECCIÓN CRÍTICA: Obtener la URL pública desde el mismo bucket 'imagenes'
+                    const { data } = supabaseClient.storage.from('imagenes').getPublicUrl(fileName);
+                    publicImagenUrl = data.publicUrl;
+                }
+
+                // Armar el objeto mapeado a Postgres
+                const nuevoProducto = {
+                    id_categorias: parseInt(selectCat.value),
+                    nombre: document.getElementById('nombre').value,
+                    marca: document.getElementById('marca').value,
+                    descripcion: document.getElementById('descripcion').value,
+                    precio_menudeo: parseFloat(document.getElementById('precio_menudeo').value),
+                    precio_mayoreo: parseFloat(document.getElementById('precio_mayoreo').value),
+                    stock: parseInt(document.getElementById('stock').value),
+                    imagen: publicImagenUrl
+                };
+
+                const { error: insertError } = await supabaseClient
+                    .from('productos')
+                    .insert([nuevoProducto]);
+
+                if (insertError) throw insertError;
+
+                alert("¡Componente electrónico registrado con éxito en Hu-Ocho Tech!");
+                form.reset();
+                fileChosen.textContent = "Ningún archivo seleccionado";
+
+            } catch (err) {
+                alert("Error al guardar: " + err.message);
+            } finally {
+                btnSubir.disabled = false;
+                btnSubir.innerText = "Subir Producto";
+            }
+        });
+
+        window.onload = () => {
+            cargarCategoriasSelect();
+        };
+
+    </script>
+</body>
+</html>

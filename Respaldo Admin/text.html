@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compresor Max - Hu-Ocho Tech</title>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 30px; background-color: #0f172a; color: #f8fafc; }
+        .card { background: #1e293b; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5); max-width: 500px; margin: auto; }
+        h2 { color: #38bdf8; margin-top: 0; }
+        input[type="file"] { margin: 15px 0; width: 100%; color: #94a3b8; }
+        .info { margin-top: 15px; background: #0f172a; padding: 15px; border-radius: 6px; font-family: monospace; display: none; border-left: 4px solid #38bdf8; }
+        #preview { max-width: 100%; margin-top: 15px; border-radius: 6px; display: none; border: 1px solid #334155; }
+        .btn-descargar { display: none; width: 100%; background-color: #0284c7; color: white; border: none; padding: 12px; margin-top: 15px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
+        .btn-descargar:hover { background-color: #0369a1; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Optimizador Extremo (WebP)</h2>
+        <p>Convierte a WebP y reduce al máximo el peso para Supabase.</p>
+        
+        <input type="file" id="input-imagen" accept="image/*">
+        
+        <div id="info-box" class="info"></div>
+        
+        <img id="preview" alt="Vista previa optimizada">
+        
+        <a id="btn-download" class="btn-descargar">Descargar Imagen Optimizada</a>
+    </div>
+
+    <script>
+        document.getElementById('input-imagen').addEventListener('change', async function(event) {
+            const imageFile = event.target.files[0];
+            if (!imageFile) return;
+
+            const infoBox = document.getElementById('info-box');
+            const preview = document.getElementById('preview');
+            const btnDownload = document.getElementById('btn-download');
+            
+            infoBox.style.display = 'block';
+            infoBox.innerHTML = 'Optimizando y convirtiendo a WebP...';
+            btnDownload.style.display = 'none';
+
+            const pesoOriginal = (imageFile.size / 1024 / 1024).toFixed(2);
+
+            // Ajustes para exprimir el espacio sin perder calidad
+            const opciones = {
+                maxSizeMB: 0.3,          // Forzamos a que intente bajar a ~300 KB o menos
+                maxWidthOrHeight: 1200,  // Resolución ideal para e-commerce
+                useWebWorker: true,
+                fileType: 'image/webp'   // <--- Aquí está la magia: convierte PNG/JPG a WebP
+            };
+
+            try {
+                // Comprimir
+                const imagenComprimida = await imageCompression(imageFile, opciones);
+                const pesoComprimido = (imagenComprimida.size / 1024 / 1024).toFixed(2);
+
+                // Si por alguna razón quedó más pesada o igual (raro), mostrar datos reales
+                const ahorro = ((1 - (imagenComprimida.size / imageFile.size)) * 100).toFixed(1);
+
+                // Mostrar info
+                infoBox.innerHTML = `
+                    <strong>Formato original:</strong> ${imageFile.type}<br>
+                    <strong>Formato final:</strong> WebP<br>
+                    <strong>Peso Original:</strong> ${pesoOriginal} MB<br>
+                    <strong>Peso Optimizado:</strong> ${pesoComprimido} MB (${(imagenComprimida.size / 1024).toFixed(0)} KB)<br>
+                    <strong>Espacio ahorrado:</strong> ${ahorro}%
+                `;
+
+                // Crear URL del archivo comprimido para la vista previa y descarga
+                const urlOptimizada = URL.createObjectURL(imagenComprimida);
+                
+                // Configurar vista previa
+                preview.src = urlOptimizada;
+                preview.style.display = 'block';
+
+                // Configurar el botón de descarga
+                btnDownload.href = urlOptimizada;
+                // Le ponemos el mismo nombre pero con extensión .webp
+                const nombreBase = imageFile.name.substring(0, imageFile.name.lastIndexOf('.')) || imageFile.name;
+                btnDownload.download = `${nombreBase}_optimizada.webp`;
+                btnDownload.style.display = 'block';
+                
+            } catch (error) {
+                infoBox.innerHTML = 'Error al optimizar: ' + error.message;
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>

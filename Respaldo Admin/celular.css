@@ -1,0 +1,190 @@
+/* ==========================================
+   HU-OCHO MOBILE OPTIMIZADO
+========================================== */
+
+@media screen and (max-width:768px){
+
+    body{
+        overflow-x:hidden;
+    }
+
+    /* HEADER */
+
+    .header-main{
+        display:grid;
+        grid-template-columns:110px 1fr 45px 45px;
+        align-items:center;
+        gap:8px;
+        padding:10px;
+    }
+
+    .brand-text{
+        text-align:left;
+        font-size:.55rem;
+        line-height:1;
+    }
+
+    .brand-text span{
+        display:block;
+        font-size:.9rem;
+        line-height:1;
+    }
+
+    .search-container{
+        width:100%;
+        margin:0;
+        max-width:none;
+    }
+
+    .search-input{
+        height:40px;
+        font-size:.85rem;
+        padding:8px 35px 8px 12px;
+    }
+
+    .header-right-menu{
+        display:contents;
+    }
+
+    #lbl-nombre-usuario{
+        display:none;
+    }
+
+    .user-status{
+        padding:0;
+        margin:0;
+        background:none;
+    }
+
+    .user-icon{
+        font-size:1.8rem;
+    }
+
+    .cart-btn-box{
+        font-size:1.8rem;
+    }
+
+    /* CATEGORIAS */
+
+    .category-navbar{
+        justify-content:flex-start;
+        overflow-x:auto;
+        flex-wrap:nowrap;
+        gap:10px;
+        padding:10px;
+        scrollbar-width:none;
+    }
+
+    .category-navbar::-webkit-scrollbar{
+        display:none;
+    }
+
+    .cat-nav-item{
+        flex-shrink:0;
+        font-size:.9rem;
+        padding:8px 15px;
+    }
+
+    /* BANNER */
+
+    .shop-announcement-banner{
+        width:96%;
+        margin:10px auto;
+        padding:10px;
+    }
+
+    .announcement-text{
+        font-size:.85rem;
+    }
+
+    /* PRODUCTOS */
+
+    .main-catalog-section{
+        width:99%;
+        margin:8px auto;
+    }
+
+    .products-grid-layout{
+        display:grid;
+        grid-template-columns:repeat(3,1fr) !important;
+        gap:6px !important;
+    }
+
+    .product-item-card{
+        padding:5px !important;
+        border-radius:8px;
+    }
+
+    .prod-card-img-box{
+        height:65px !important;
+        margin-bottom:4px;
+    }
+
+    .prod-card-img{
+        max-height:55px;
+        object-fit:contain;
+    }
+
+    .prod-card-title{
+        font-size:.62rem !important;
+        margin-bottom:2px;
+        min-height:auto;
+    }
+
+    .prod-card-prices{
+        font-size:.58rem !important;
+        margin-bottom:3px;
+        line-height:1.2;
+    }
+
+    .btn-card-action{
+        padding:5px !important;
+        font-size:.58rem !important;
+        border-radius:12px;
+    }
+
+    /* CARRITO */
+
+    .cart-dropdown-preview{
+        width:95vw;
+        right:-10px;
+    }
+
+    /* FOOTER */
+
+    .footer-columns-grid{
+        grid-template-columns:1fr;
+        gap:15px;
+    }
+}
+
+/* TELEFONOS PEQUEÑOS */
+
+@media screen and (max-width:480px){
+
+    .header-main{
+        grid-template-columns:90px 1fr 40px 40px;
+        gap:6px;
+    }
+
+    .brand-text{
+        font-size:.45rem;
+    }
+
+    .brand-text span{
+        font-size:.75rem;
+    }
+
+    .user-icon{
+        font-size:1.6rem;
+    }
+
+    .cart-btn-box{
+        font-size:1.6rem;
+    }
+
+    .products-grid-layout{
+        grid-template-columns:repeat(2,1fr) !important;
+        gap:6px !important;
+    }
+}

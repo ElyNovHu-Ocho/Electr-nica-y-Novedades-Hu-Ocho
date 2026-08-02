@@ -511,7 +511,9 @@
       position: fixed;
       left: -270px;
       top: 70px;
-      height: calc(100vh - 70px);
+      bottom: 0;
+      height: auto;
+      padding-bottom: 25px;
       transition: left 0.3s ease;
    }
 

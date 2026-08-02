@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Electrónica Hu-Ocho Tech</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { display: flex; height: 100vh; background-color: #e9f1f7; color: #333; overflow: hidden; }
+
+        /* ==================== BARRA LATERAL (SIDEBAR) ==================== */
+        .sidebar { width: 240px; background-color: #2b4c6f; color: white; display: flex; flex-direction: column; box-shadow: 3px 0 10px rgba(0,0,0,0.15); }
+        
+        /* Encabezado del Logo */
+        .logo-container { padding: 15px; background-color: #1e354f; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #2b4c6f; }
+        .logo-icon { font-size: 2rem; color: #ffffff; }
+        .logo-text { font-size: 0.95rem; font-weight: bold; line-height: 1.2; letter-spacing: 0.5px; }
+        .logo-text span { display: block; font-size: 1.15rem; color: #a1c4fd; }
+
+        /* Menú de Opciones */
+        .menu-nav { list-style: none; display: flex; flex-direction: column; padding: 15px 0; flex-grow: 1; }
+        .menu-item a { display: block; padding: 14px 20px; color: #e2f0fd; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s ease; }
+        .menu-item a:hover { background-color: #375f8a; color: #ffffff; padding-left: 25px; }
+        .menu-item.active a { background-color: #4172a3; color: white; border-left: 5px solid #a1c4fd; font-weight: bold; }
+        
+        /* Botón Salir al fondo */
+        .menu-item-logout a { color: #ff9999; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto; font-weight: bold; }
+        .menu-item-logout a:hover { background-color: #993333; color: white; }
+
+        /* ==================== ÁREA PRINCIPAL CONTENEDORA ==================== */
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
+        
+        .welcome-title { text-align: center; color: #2b4c6f; font-size: 2.3rem; font-weight: 600; margin-bottom: 5px; }
+        .section-subtitle { text-align: center; color: #cc3333; font-size: 1.2rem; font-weight: bold; text-decoration: underline; margin-bottom: 5px; }
+
+        /* ==================== TARJETAS Y CONTENEDORES MOCKUP ==================== */
+        /* Bloque Superior: Visitas e Ingresos */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; border-left: 1px solid #b0c4de; border-right: 1px solid #b0c4de; min-height: 120px; background: white; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stat-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: relative; }
+        .stat-box:first-child::after { content: ''; position: absolute; right: 0; top: 15%; height: 70%; width: 1px; background-color: #b0c4de; }
+        .stat-label { font-size: 1.2rem; font-weight: bold; color: #333; text-align: center; margin-bottom: 10px; }
+        .stat-value { font-size: 1.8rem; font-weight: bold; color: #2b4c6f; }
+
+        /* Tablas de Reportes */
+        .report-section { background: white; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); padding: 15px; border-top: 1px solid #b0c4de; }
+        
+        .table-custom { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .table-custom th, .table-custom td { border: 1px solid #b0c4de; padding: 10px; text-align: center; font-size: 0.95rem; }
+        .table-custom th { background-color: #f0f4f8; color: #333; font-weight: bold; }
+        
+        /* Estilos específicos de alertas en tablas */
+        .text-alert-title { text-align: center; color: #cc3333; font-size: 1.15rem; font-weight: bold; margin-bottom: 5px; }
+        .text-section-title { text-align: center; color: #cc3333; font-size: 1.2rem; font-weight: bold; margin-bottom: 5px; }
+        
+        .badge-low-stock { background-color: #ffe6e6; color: #cc3333; font-weight: bold; padding: 4px 8px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">🎮</div>
+            <div class="logo-text">
+                ELECTRÓNICA
+                <span>HU-OCHO</span>
+            </div>
+        </div>
+
+        <ul class="menu-nav">
+            <li class="menu-item active"><a href="dashboard.html">Inicio / Dashboard</a></li>
+            <li class="menu-item"><a href="agregar_productos.html">Agregar productos</a></li>
+            <li class="menu-item"><a href="modificar_productos.html">Modificar Productos</a></li>
+            <li class="menu-item"><a href="categorias.html">Gestionar Categorías</a></li>
+            <li class="menu-item"><a href="historial_pedidos.html">Historial de Pedidos</a></li>
+            <li class="menu-item"><a href="configuracion.html">Configuración</a></li>
+            <li class="menu-item menu-item-logout"><a href="index.html">Salir</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        
+        <h1 class="welcome-title">¡Bienvenido (Administrador)!</h1>
+        <h3 class="section-subtitle">Estos son los informes de forma resumida</h3>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Visitas de la Pagina web</div>
+                <div class="stat-value" id="count-visitas">Cargando...</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Ingresos Semanales</div>
+                <div class="stat-value" id="count-ingresos">$0.00</div>
+            </div>
+        </div>
+
+        <div>
+            <h3 class="text-alert-title">¡Atención! Estos productos están a punto de agotar</h3>
+            <div class="report-section">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th style="width: 60%;">Producto</th>
+                            <th style="width: 40%;">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-criticos">
+                        <tr>
+                            <td colspan="2" style="color: #888;">Buscando existencias bajas en Supabase...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div>
+            <h3 class="text-section-title">Últimos Pedidos</h3>
+            <div class="report-section">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Nombre Cliente</th>
+                            <th>Artículos (Num)</th>
+                            <th>Total</th>
+                            <th>Dirección</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pedidos">
+                        <tr>
+                            <td colspan="4" style="color: #888;">Cargando historial de pedidos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = "https://lzqltchzefuttbvhcrlq.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWx0Y2h6ZWZ1dHRidmhjcmxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTA3ODMsImV4cCI6MjA5NDc4Njc4M30.z8IFypXSV7j5w396Jk9B7q9z2xTT4RG-TFzFhVpED6c";
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // 1. CARGAR MÉTRICA DE VISITAS
+        async function obtenerVisitas() {
+            try {
+                // Hacemos un conteo de las filas en la tabla 'visitas'
+                const { count, error } = await supabaseClient
+                    .from('visitas')
+                    .select('*', { count: 'exact', head: true });
+
+                if (error) throw error;
+                document.getElementById('count-visitas').innerText = count || 0;
+            } catch (err) {
+                document.getElementById('count-visitas').innerText = "0";
+            }
+        }
+
+        // 2. CARGAR COMPONENTES CON STOCK MENOR A 5 UNIDADES
+        async function obtenerStockBajo() {
+            try {
+                const { data: productos, error } = await supabaseClient
+                    .from('productos')
+                    .select('nombre, stock')
+                    .lt('stock', 5) // Traer productos con menos de 5 piezas
+                    .order('stock', { ascending: true });
+
+                if (error) throw error;
+
+                const tbody = document.getElementById('tabla-criticos');
+                if (!productos || productos.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="2" style="color: #48bb78; font-weight: bold;">✅ Todo el inventario tiene stock suficiente.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                productos.forEach(prod => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td style="text-align: left; padding-left: 20px;">${prod.nombre}</td>
+                            <td><span class="badge-low-stock">${prod.stock} pzas</span></td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // 3. CARGAR SIMULACIÓN DE PEDIDOS (Dejamos listas las celdas limpias para cuando uses la tabla 'pedidos')
+async function obtenerPedidos() {
+    const tbody = document.getElementById('tabla-pedidos');
+    // Si usas un loader o mensaje inicial
+    tbody.innerHTML = `<tr><td colspan="4" style="color: #cbd5e1; text-align: center;">Cargando pedidos...</td></tr>`;
+
+    try {
+        // Quitamos "direccion" de la consulta relacional de cliente
+        const { data: pedidos, error } = await supabaseClient
+            .from('pedidos')
+            .select('id_pedidos, total, cliente(nombre)') 
+            .order('id_pedidos', { ascending: false });
+
+        if (error) throw error;
+
+        tbody.innerHTML = '';
+
+        if (!pedidos || pedidos.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" style="color: #888; text-align: center; padding: 15px;">
+                        No hay pedidos registrados en el historial todavía.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        pedidos.forEach(p => {
+            const nombreCliente = p.cliente ? p.cliente.nombre : 'Cliente Desconocido';
+            // Como no viene de la base de datos, ponemos un texto por defecto o lo dejas en blanco
+            const direccionCliente = 'Apodaca Centro'; 
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>${nombreCliente}</td>
+                    <td>#${p.id_pedidos}</td>
+                    <td style="font-weight: bold; color: #4ade80;">$${parseFloat(p.total).toFixed(2)}</td>
+                    <td>${direccionCliente}</td>
+                </tr>
+            `;
+        });
+
+    } catch (err) {
+        console.error("Error al obtener pedidos:", err);
+        tbody.innerHTML = `<tr><td colspan="4" style="color: #f87171; text-align: center;">Error al cargar datos.</td></tr>`;
+    }
+}
+        // Ejecutar consultas al cargar la página
+        window.onload = () => {
+            obtenerVisitas();
+            obtenerStockBajo();
+            obtenerPedidos();
+        };
+    </script>
+</body>
+</html>

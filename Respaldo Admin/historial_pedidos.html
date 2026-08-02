@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Pedidos - Electrónica Hu-Ocho Tech</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #e9f1f7; color: #333; overflow: hidden; }
+
+        /* SIDEBAR */
+        .sidebar { width: 240px; background-color: #2b4c6f; color: white; display: flex; flex-direction: column; box-shadow: 3px 0 10px rgba(0,0,0,0.15); flex-shrink: 0; }
+        .logo-container { padding: 15px; background-color: #1e354f; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #2b4c6f; }
+        .logo-icon { font-size: 2rem; color: #ffffff; }
+        .logo-text { font-size: 0.95rem; font-weight: bold; line-height: 1.2; letter-spacing: 0.5px; }
+        .logo-text span { display: block; font-size: 1.15rem; color: #a1c4fd; }
+        .menu-nav { list-style: none; display: flex; flex-direction: column; padding: 15px 0; flex-grow: 1; }
+        .menu-item a { display: block; padding: 14px 20px; color: #e2f0fd; text-decoration: none; font-size: 0.95rem; font-weight: 500; border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.2s ease; }
+        .menu-item a:hover { background-color: #375f8a; color: #ffffff; padding-left: 25px; }
+        .menu-item.active a { background-color: #4172a3; color: white; border-left: 5px solid #a1c4fd; font-weight: bold; }
+        .menu-item-logout a { color: #ff9999; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: auto; font-weight: bold; }
+
+        /* ÁREA PRINCIPAL */
+        .main-content { flex-grow: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; background-color: #e9f1f7; }
+        .section-header-title { background-color: #1a2430; color: #ffffff; width: 100%; max-width: 800px; text-align: center; padding: 12px; border-radius: 25px; font-size: 1.6rem; font-weight: bold; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); margin-bottom: 25px; border: 2px solid #00e6cc; }
+
+        /* PANEL HISTORY */
+        .history-panel { width: 100%; max-width: 1000px; background-color: #1a2430; padding: 35px; border-radius: 40px; box-shadow: 0 8px 30px rgba(0,0,0,0.4); border: 1px solid #2b4c6f; }
+        .table-container { width: 100%; overflow-x: auto; }
+        .history-table { width: 100%; border-collapse: collapse; color: white; }
+        .history-table th { padding: 15px; border: 1px solid #ffffff; font-size: 1.1rem; font-weight: normal; color: #ffffff; text-align: center; }
+        .history-table td { padding: 15px; border: 1px solid #ffffff; text-align: center; font-size: 1rem; height: 55px; }
+
+        .details-link { color: #00e6cc; text-decoration: none; font-weight: bold; cursor: pointer; transition: all 0.2s ease; padding: 5px 10px; border-radius: 5px; }
+        .details-link:hover { background-color: #00e6cc; color: #1a2430; text-decoration: none; }
+
+        .btn-num { padding: 10px 16px; background-color: #2b4c6f; color: #e2f0fd; border: 1px solid #00e6cc; border-radius: 8px; cursor: pointer; font-size: 0.95rem; font-weight: 600; transition: all 0.3s ease; }
+        .btn-num:hover { background-color: #375f8a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 230, 204, 0.3); }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 100; }
+        .modal-content { background-color: #1a2430; border: 2px solid #00e6cc; padding: 25px; border-radius: 20px; width: 90%; max-width: 500px; color: white; }
+        .modal-header { font-size: 1.3rem; font-weight: bold; color: #00e6cc; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; display: flex; justify-content: space-between; }
+        .modal-close { cursor: pointer; color: #f87171; font-weight: bold; }
+        .detail-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2d3748; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo-container">
+            <div class="logo-icon">🎮</div>
+            <div class="logo-text">ELECTRÓNICA<span>HU-OCHO</span></div>
+        </div>
+        <ul class="menu-nav">
+            <li class="menu-item"><a href="dashboard.html">Inicio / Dashboard</a></li>
+            <li class="menu-item"><a href="agregar_productos.html">Agregar productos</a></li>
+            <li class="menu-item"><a href="modificar_productos.html">Modificar Productos</a></li>
+            <li class="menu-item"><a href="categorias.html">Gestionar Categorías</a></li>
+            <li class="menu-item active"><a href="historial_pedidos.html">Historial de Pedidos</a></li>
+            <li class="menu-item"><a href="configuracion.html">Configuración</a></li>
+            <li class="menu-item menu-item-logout"><a href="index.html">Salir</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="section-header-title">Historial de Pedidos</div>
+        <div class="history-panel">
+            <div class="table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Productos comprados</th>
+                            <th>Fecha de Pedido</th>
+                            <th>Total</th>
+                            <th>Detalles</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabla-pedidos-body">
+                        <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+ <div id="contenedor-paginacion" style="margin-top: 30px; text-align: center; border-top: 1px solid #334155; padding-top: 20px;">
+        <p style="color: #000000; margin-bottom: 10px;">Páginas:</p>
+        <div id="botones-paginacion" style="display: flex; justify-content: center; flex-wrap: wrap; gap: 5px;">
+            </div>
+    </div>
+        </div>
+    </div>
+    <div id="modal-detalles" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span>Contenido del Pedido</span>
+                <span class="modal-close" onclick="cerrarModal()">X</span>
+            </div>
+            <div id="modal-lista-articulos"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+    // 1. CONFIGURACIÓN Y VARIABLES GLOBALES
+    let pedidosGlobales = [];
+    const PEDIDOS_POR_PAGINA = 10;
+    const SUPABASE_URL = "https://lzqltchzefuttbvhcrlq.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6cWx0Y2h6ZWZ1dHRidmhjcmxxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkyMTA3ODMsImV4cCI6MjA5NDc4Njc4M30.z8IFypXSV7j5w396Jk9B7q9z2xTT4RG-TFzFhVpED6c";
+    
+    // Inicializamos el cliente. Usamos 'supabaseClient' para evitar conflictos.
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 2. FUNCIÓN PARA DIBUJAR LA TABLA
+    function renderizarTabla(datos) {
+        const tbody = document.getElementById('tabla-pedidos-body');
+        tbody.innerHTML = '';
+        
+        datos.forEach(p => {
+            const fechaFormateada = p.fecha ? new Date(p.fecha).toLocaleDateString() : 'N/A';
+            const total = p.total ? parseFloat(p.total).toFixed(2) : '0.00';
+            const nombre = p.cliente?.nombre || 'Desconocido';
+            const correo = p.cliente?.correo || 'N/A';
+            const cant = p.detalle_pedidos?.reduce((sum, item) => sum + item.cantidad, 0) || 0;
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td>${nombre}</td>
+                    <td>${correo}</td>
+                    <td>${cant} pzas</td>
+                    <td>${fechaFormateada}</td>
+                    <td style="font-weight: bold; color: #4ade80;">$${total}</td>
+                    <td><span class="details-link" onclick="verDetallesPedido(${p.id_pedidos})">Ver detalles</span></td>
+                </tr>
+            `;
+        });
+
+        // Relleno para mantener la altura de la tabla
+        for (let i = datos.length; i < PEDIDOS_POR_PAGINA; i++) {
+            tbody.innerHTML += `<tr style="height: 48px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>`;
+        }
+    }
+
+    // 3. LÓGICA DE PAGINACIÓN
+    function cambiarPagina(numPagina) {
+        const inicio = numPagina * PEDIDOS_POR_PAGINA;
+        const fin = inicio + PEDIDOS_POR_PAGINA;
+        renderizarTabla(pedidosGlobales.slice(inicio, fin));
+    }
+
+    // 4. CARGA DE DATOS Y GENERACIÓN DE BOTONES
+    async function cargarHistorialPedidos() {
+        try {
+            const { data: pedidos, error } = await supabaseClient
+                .from('pedidos')
+                .select('id_pedidos, fecha, total, cliente(nombre, correo), detalle_pedidos(cantidad)')
+                .order('id_pedidos', { ascending: false });
+
+            if (error) throw error;
+            pedidosGlobales = pedidos;
+            
+            const totalPaginas = Math.ceil(pedidosGlobales.length / PEDIDOS_POR_PAGINA);
+            const contenedor = document.getElementById('botones-paginacion');
+            contenedor.innerHTML = '';
+            
+            for (let i = 0; i < totalPaginas; i++) {
+                const btn = document.createElement('button');
+                btn.innerText = i + 1;
+                btn.className = 'btn-num';
+                btn.onclick = () => cambiarPagina(i);
+                contenedor.appendChild(btn);
+            }
+            
+            cambiarPagina(0);
+        } catch (err) { console.error("Error al cargar:", err); }
+    }
+
+    // 5. FUNCIONES PARA MODAL (Detalles)
+    async function verDetallesPedido(idPedido) {
+        const modal = document.getElementById('modal-detalles');
+        const lista = document.getElementById('modal-lista-articulos');
+        lista.innerHTML = '<p>Cargando...</p>';
+        modal.style.display = 'flex';
+
+        try {
+            const { data: detalles, error } = await supabaseClient
+                .from('detalle_pedidos')
+                .select('cantidad, precio_aplicado, productos(nombre)')
+                .eq('id_pedidos', idPedido);
+
+            if (error) throw error;
+            lista.innerHTML = '';
+            detalles.forEach(d => {
+                lista.innerHTML += `<div class="detail-item"><span>${d.productos?.nombre || "Producto"} (x${d.cantidad})</span><span>$${(d.cantidad * d.precio_aplicado).toFixed(2)}</span></div>`;
+            });
+        } catch (err) { lista.innerHTML = '<p>Error al cargar detalles.</p>'; }
+    }
+
+    function cerrarModal() { document.getElementById('modal-detalles').style.display = 'none'; }
+
+    // Ejecución inicial
+    window.onload = cargarHistorialPedidos;
+</script>
+</body>
+</html>
