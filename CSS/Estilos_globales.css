@@ -433,7 +433,7 @@ body:has(.envoltura-principal) {
 }
 
 @media (max-width: 768px) {
-   body {
+   html,body {
       overflow-x: hidden;
       width: 100%;
    }
@@ -481,7 +481,7 @@ body:has(.envoltura-principal) {
 
    body .barra-navegacion-categorias {
       display: flex;
-      overflow-x: auto;
+      overflow-x: auto !important;
       white-space: nowrap;
       padding: 10px 15px;
       justify-content: flex-start;
